@@ -95,8 +95,7 @@ B) `4`
 C) `2 + 2`
 D) An error message
 
-
-
+##Hooks
 
 This is a "high-value" question for your exam. If `JSX` is the body of React, **Hooks** are its heartbeat. They are the special functions that let you "hook into" React features like state and lifecycle methods from function components.
 
