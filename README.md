@@ -530,3 +530,129 @@ A) The screen updates immediately.
 B) The screen updates after 1 second.
 C) The variable `count` changes in memory, but the screen does **not** update.
 D) React throws an error.
+
+---
+
+---
+This is a crucial question because it touches on the core identity of a React app: the **Single Page Application (SPA)**.
+
+To fill 2 pages for your exam, you need to tell the story of "The Great Deception." React Router is essentially a magic trick that fools the user into thinking they are visiting different pages, while they never actually leave the first one.
+
+### Part 1: The Difference (Traditional vs. React Routing)
+
+#### 1\. Traditional Routing (Server-Side)
+
+Imagine visiting a multi-story department store.
+
+  * **The Process:** When you want to go from the "Men's Section" (Page A) to the "Shoe Section" (Page B), you have to walk out of the building, get in your car, drive around the block, and re-enter the building through the Shoe Section entrance.
+  * **Technical Reality:** Every time you click a link (`<a href="...">`), the browser sends a request to the server. The server builds a brand new HTML file and sends it back. The screen goes white (flashes) for a second, and the whole page reloads from scratch.
+
+#### 2\. React Routing (Client-Side)
+
+Now, imagine a futuristic "Holodeck" room.
+
+  * **The Process:** You want to go to the "Shoe Section." You don't move. Instead, the room instantly rearranges itself around you. The "Men's Section" furniture vanishes, and "Shoe Section" furniture appears. You never left the room.
+  * **Technical Reality:** React Router listens for the URL change. When it sees the URL change to `/shoes`, it says, "Don't reload\! I've got this." It unmounts the `<MensSection>` component and mounts the `<ShoeSection>` component.
+  * **The Benefit:** It is instant. No white flash. No waiting for the server. It feels like a native mobile app.
+
+-----
+
+### Part 2: Setting Up Basic Routes (The "Traffic Controller")
+
+To make this magic work, we use a library called **`react-router-dom`**. It has four main characters you need to introduce in your exam answer.
+
+#### The Four Key Characters:
+
+1.  **`BrowserRouter` (The Road System):** It wraps your entire application. It keeps the UI in sync with the URL.
+2.  **`Routes` (The Switchboard):** (Note: In older versions this was called `Switch`). It looks at the URL and decides *exclusive* which one route matches.
+3.  **`Route` (The Rule):** It defines the relationship: "If the URL path is **X**, show Component **Y**."
+4.  **`Link` (The Portal):** This replaces the HTML `<a>` tag. Instead of reloading the page, it just changes the URL in the browser bar silently.
+
+#### Code Example: The Website Setup
+
+Here is the beginner-friendly code you should use. It sets up a website with a **Home**, **About**, and **Contact** page.
+
+**Step 1: Installation**
+(Write this line in your exam)
+`npm install react-router-dom`
+
+**Step 2: The Main Setup (`App.js`)**
+
+```javascript
+import React from 'react';
+// 1. Import the necessary tools
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+
+// These are the components we want to show (The "Pages")
+function Home() { return <h2>Welcome Home! 🏠</h2>; }
+function About() { return <h2>About Us 📖</h2>; }
+function Contact() { return <h2>Contact Me 📞</h2>; }
+
+function App() {
+  return (
+    // 2. Wrap everything in BrowserRouter
+    <BrowserRouter>
+      <div>
+        {/* Navigation Bar */}
+        <nav>
+          <ul>
+            {/* 3. Use Link instead of <a href> */}
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/about">About</Link></li>
+            <li><Link to="/contact">Contact</Link></li>
+          </ul>
+        </nav>
+
+        <hr />
+
+        {/* 4. Define the Routes here */}
+        <Routes>
+          {/* If path is '/', show Home component */}
+          <Route path="/" element={<Home />} />
+          
+          {/* If path is '/about', show About component */}
+          <Route path="/about" element={<About />} />
+          
+          {/* If path is '/contact', show Contact component */}
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
+        
+      </div>
+    </BrowserRouter>
+  );
+}
+
+export default App;
+```
+
+-----
+
+### Part 3: Key Points to Highlight (For Extra Marks)
+
+**1. The `element` Prop (v6 Update)**
+Make sure to note that in the latest version (React Router v6), we use `element={<Component />}` instead of the old `component={Component}`. This allows us to pass props directly to the page components if we need to.
+
+**2. Why `<Link>` and not `<a>`?**
+This is a favorite interview/exam question.
+
+  * **`<a>` tag:** Triggers a full browser refresh. The React state is wiped out.
+  * **`<Link>` component:** Uses the HTML5 History API to change the URL *without* refreshing. It preserves your application state.
+
+**3. Dynamic Routing (The "Wildcard")**
+You can mention that React Router is powerful enough to handle dynamic data. For example, a route like `<Route path="/user/:id" />` can handle `/user/1`, `/user/50`, or `/user/alice` all with the same component.
+
+-----
+
+### Practice Quiz
+
+**Question:**
+In the code above, if I accidentally used `<a href="/about">About</a>` instead of `<Link to="/about">About</Link>`, what is the one bad thing that would happen?
+
+A) The link wouldn't work at all.
+B) The user would get a 404 error.
+C) The page would fully reload, and the app would be slower.
+D) React Router would crash.
+
+(Hint: Think about the "Department Store" vs. "Holodeck" analogy.)
+---
+---
