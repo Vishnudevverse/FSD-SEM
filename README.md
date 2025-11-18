@@ -371,3 +371,65 @@ In the `useMemo` example above, if I click the **"Change Theme"** button 10 time
 2.  How many times does the "slow" `doubleNumber` function run?
 
 (Think about what is inside the dependency array\!)
+
+-----
+
+This is the perfect follow-up. In your exam, after you explain JSX (the "language"), the logical next step is to explain **Components** (the "building blocks" written in that language).
+
+To "mingle" this with your previous answer, think of it this way: **JSX is the glue, and Components are the Lego bricks.**
+
+Here is how to explain the **Component-Based Architecture** and how it differs from the old school way, adding depth to your exam story.
+
+### The Shift: From "Pages" to "Parts"
+
+#### 1. Traditional UI Development: "Separation of Technologies"
+In the traditional approach (which we call the "Old World"), developers organized code by **file type**.
+* **The HTML file:** Held all the structure for the *entire* page.
+* **The CSS file:** Held all the styles for the *entire* page.
+* **The JS file:** Held all the logic for the *entire* page.
+
+**The Problem:** This is like building a car where you put all the metal parts in one pile, all the glass in another, and all the rubber in a third. If you wanted to fix the "Door," you had to hunt through the metal pile, then the glass pile, and then the rubber pile. It was messy. A change in the HTML often broke the JS.
+
+#### 2. React’s Architecture: "Separation of Concerns"
+React flipped this upside down. Instead of separating files by language (HTML/CSS/JS), it separates them by **functionality**.
+* **The Component:** A single file (usually) that contains the HTML (via JSX), the CSS (often), and the JS logic **for just that one specific part of the UI**.
+
+**The Analogy:** This is the **Lego** approach. You build a "Wheel" component (rubber + plastic + axle). You build a "Windshield" component. Then you just snap them together to make the car.
+
+
+
+### Key Differences (Points to Add to Your Answer)
+
+Here are the specific points you can add to your "JSX + Components" exam answer to make it lengthier and technically robust:
+
+**A. "Separation of Concerns" vs. "Separation of Technologies"**
+* *Add this:* "While traditional web development focuses on 'Separation of Technologies' (keeping HTML, CSS, and JS in different files), React focuses on 'Separation of Concerns.' This means everything a button needs to work—its look (JSX), its style, and its click handler—lives inside one `Button.js` file. This makes the code easier to maintain because you don't have to switch context between three different files to change one button."
+
+**B. Reusability (The "Write Once, Use Everywhere" Rule)**
+* *Add this:* "In traditional HTML, if you need a specific navigation bar on 10 different pages, you essentially copy-paste that HTML code 10 times. If you need to change a link, you fix it 10 times. In React's component architecture, you define the `<Navbar />` component once. You can then simply drop this tag wherever you need it. If you change the component, it updates everywhere instantly."
+
+**C. Isolation and Independence**
+* *Add this:* "React components are isolated. A bug in the 'Sidebar' component won't crash the 'Footer' component. This is different from traditional JS, where a global variable conflict or a missing DOM element could crash the script for the entire page."
+
+**D. Unidirectional Data Flow**
+* *Add this:* "Traditional UI often uses two-way data binding or messy DOM manipulation (jQuery style) where data flies everywhere. React components enforce a strictly **Unidirectional Data Flow** (One-Way). Data flows down from Parent components to Child components via **Props**. This makes debugging predictable—you always know where the data came from."
+
+### How JSX Fits In (The Conclusion)
+To tie it all back to your previous answer:
+
+> "JSX is the enabler of this Component-Based Architecture. Because JSX allows us to write markup *inside* JavaScript, we can finally create these self-contained 'Lego bricks' (Components) that possess both logic and structure. Without JSX, the component architecture would be clumsy and verbose; with JSX, it feels natural."
+
+---
+
+### Practice Question
+Let's test if you've got the concept of **Reusability** down.
+
+Imagine you are building an E-commerce site (like Amazon). You have a list of 50 different products to display.
+1.  **Traditional Way:** You write 50 blocks of HTML `<div>`s, one for each product.
+2.  **React Way:** You create one component.
+
+What would that one React component be called, and what changes for each of the 50 items?
+
+* **A)** `ProductList` component; nothing changes.
+* **B)** `ProductItem` component; the **Props** (data like image, price, name) change for each one.
+* **C)** `Navbar` component; the style changes.
