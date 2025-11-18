@@ -228,3 +228,146 @@ A) `useState`
 B) `useEffect`
 C) `useMemo`
 D) `useRef`
+
+My apologies\! I got so caught up in the spy story that I left out the gadgets themselves. Since you know Flutter, `useContext` will feel very familiar—it is basically React's version of `InheritedWidget` or the `Provider` package.
+
+Here are the story-driven code examples for your exam.
+
+### 1\. `useContext` – The "Teleporter" (Avoiding Prop Drilling)
+
+**The Scenario:**
+Imagine you have a "Theme" (Dark Mode vs. Light Mode).
+
+  * **Without Context:** You pass the "theme" string from the Grandparent -\> Parent -\> Child -\> Grandchild. It is exhausted.
+  * **With Context:** You wrap the app in a "Provider," and the Grandchild just grabs the data directly.
+
+**Step 1: Create the Context (The Signal Tower)**
+
+```javascript
+import React, { useState, useContext, createContext } from 'react';
+
+// 1. Create the Context object
+const ThemeContext = createContext();
+```
+
+**Step 2: The Provider (The Broadcaster)**
+
+```javascript
+function App() {
+  const [theme, setTheme] = useState("dark");
+
+  return (
+    // 2. Wrap children in the Provider and pass the value
+    <ThemeContext.Provider value={theme}>
+      <div className="App">
+        <h1>Parent Component</h1>
+        {/* Note: We are NOT passing theme as a prop here! */}
+        <Toolbar /> 
+        <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
+            Toggle Theme
+        </button>
+      </div>
+    </ThemeContext.Provider>
+  );
+}
+
+function Toolbar() {
+  return (
+    <div>
+       {/* Toolbar doesn't care about the theme, it just holds the button */}
+      <ThemedButton /> 
+    </div>
+  );
+}
+```
+
+**Step 3: The Consumer (The Receiver)**
+
+```javascript
+function ThemedButton() {
+  // 3. Use the hook to grab the value directly from the air!
+  const theme = useContext(ThemeContext); 
+
+  return (
+    <button style={{ background: theme === "dark" ? "black" : "white", color: theme === "dark" ? "white" : "black" }}>
+      I am a {theme} button!
+    </button>
+  );
+}
+```
+
+-----
+
+### 2\. `useMemo` – The "Expensive Calculation Saver"
+
+**The Scenario:**
+You have a function `slowFunction` that loops a billion times to double a number. It takes 1 second to run.
+
+  * **Without useMemo:** Every time *anything* in your component changes (even something unrelated, like a background color toggle), React re-runs the entire component, including that slow function. The app freezes for 1 second every time you click anything.
+  * **With useMemo:** React says, "Wait, has the number changed? No? Then I’ll just use the answer I wrote down last time."
+
+<!-- end list -->
+
+```javascript
+import React, { useState, useMemo } from 'react';
+
+function ExpensiveCalculationComponent() {
+  const [number, setNumber] = useState(0);
+  const [dark, setDark] = useState(false);
+
+  // This mimics a slow function (The "Heavy Lifting")
+  const doubleNumber = (num) => {
+    console.log("Calling slow function...");
+    for (let i = 0; i < 1000000000; i++) {} // Artificial delay
+    return num * 2;
+  };
+
+  // THE FIX: useMemo
+  // It only runs 'doubleNumber' if 'number' changes.
+  // If 'dark' changes, it skips this and uses the cached result.
+  const calculatedStyle = useMemo(() => {
+    return doubleNumber(number);
+  }, [number]); // <--- Dependency Array: Only run if [number] changes
+
+  // Style for the theme
+  const themeStyles = {
+    backgroundColor: dark ? 'black' : 'white',
+    color: dark ? 'white' : 'black'
+  };
+
+  return (
+    <div style={themeStyles}>
+      <input
+        type="number"
+        value={number}
+        onChange={(e) => setNumber(parseInt(e.target.value))}
+      />
+      <button onClick={() => setDark(prevDark => !prevDark)}>
+        Change Theme
+      </button>
+      
+      {/* This number updates instantly when theme changes because it's memoized */}
+      <div className="output-box">
+        Result: {calculatedStyle}
+      </div>
+    </div>
+  );
+}
+```
+
+**Key Takeaway for the Exam:**
+Notice the **Dependency Array** `[number]` at the end of `useMemo`.
+
+  * If `number` changes -\> Re-calculate.
+  * If `dark` (theme) changes -\> Do **not** re-calculate.
+
+-----
+
+### Quick Check
+
+In the `useMemo` example above, if I click the **"Change Theme"** button 10 times:
+
+1.  How many times does the background color change?
+2.  How many times does the "slow" `doubleNumber` function run?
+
+(Think about what is inside the dependency array\!)
